@@ -1,18 +1,15 @@
 #pragma once
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
 
 #include <string>
 #include <iostream>
+#include "InputValidation.h"
 
 void ShowMenu();
-int UserInput();
-bool CheckInput();
-bool OptionSelect(char);
+void OptionSelect(char);
 void CalculateVelocity();
 void CalculateAcceleration();
 int MotionMenu();
-void CalculateMotion();
+void CalculateMotion(int);
 void CalculateNewtonsSecondLaw();
 void CalculateWeight();
 void ClearScreen();
@@ -26,51 +23,38 @@ void ShowMenu()
      std::cout << "PHYSICS CALCULATOR" << std::endl;
      std::cout << "\'V\' - TO CALCULATE VELOCITY" << std::endl;
      std::cout << "\'A\' - TO CALCULATE ACCELERATION" << std::endl;
-     std::cout << "\'M\' - MOTION SUBMENU" << std::endl;
+     std::cout << "\'M\' - TO CALCULATE MOTION" << std::endl;
      std::cout << "\'N\' - TO CALCULATE NEWTON'S 2ND LAW" << std::endl;
      std::cout << "\'W\' - TO FIND WEIGHT" << std::endl;
-     std::cout << "\'C\' - TO CLEAR SCREEN" << std::endl;
      std::cout << "\'E\' - TO EXIT" << std::endl;
 }
 
-int UserInput()
+void OptionSelect(char selection)
 {
-     return 0;
-}
-
-bool CheckInput()
-{
-     return true;
-}
-
-bool OptionSelect(char selection)
-{
-
+     int subMenuSelection;
      switch (selection)
      {
      case('V'):
           CalculateVelocity();
-          return true;
+          break;
      case('A'):
           CalculateAcceleration();
-          return true;
+          break;
      case('M'):
-          MotionMenu();
-          CalculateMotion();
-          return true;
+          subMenuSelection = MotionMenu();
+          CalculateMotion(subMenuSelection);
+          break;
      case('N'):
           CalculateNewtonsSecondLaw();
-          return true;
+          break;
      case('W'):
           CalculateWeight();
-          return true;
-     case('C'):
-          ClearScreen();
-          return true;
+          break;
      case('E'):
-          return true;
+          break;
      default:
-          return false;
+          std::cout << "Not a valid selection." << std::endl;
+          break;
      }
 }
 
@@ -80,13 +64,13 @@ void CalculateVelocity()
      double distance, time;
 
      std::cout << "ENTER THE CHANGE IN DISTANCE" << std::endl;
-     std::cin >> distance;
+     distance = validateDouble(distance);
      std::cout << "ENTER THE UNITS OF MEASUREMENT FOR DISTANCE" << std::endl;
-     std::cin >> distanceUnits;
+     distanceUnits = validateString(distanceUnits);
      std::cout << "ENTER THE CHANGE IN TIME" << std::endl;
-     std::cin >> time;
+     time = validateDouble(time);
      std::cout << "ENTER THE UNITS OF MEASUREMENT FOR TIME" << std::endl;
-     std::cin >> timeUnits;
+     timeUnits = validateString(timeUnits);
      timeUnits = Capitalize(timeUnits);
      distanceUnits = Capitalize(distanceUnits);
 
@@ -101,29 +85,57 @@ void CalculateAcceleration()
      double velocity, time;
 
      std::cout << "ENTER THE CHANGE IN VELOCITY" << std::endl;
-     std::cin >> velocity;
+     velocity = validateDouble(velocity);
      std::cout << "ENTER THE UNITS OF MEASUREMENT FOR VELOCITY" << std::endl;
-     std::cin >> velocityUnits;
+     validateString(velocityUnits);
      std::cout << "ENTER THE CHANGE IN TIME" << std::endl;
-     std::cin >> time;
+     time = validateDouble(time);
      std::cout << "ENTER THE UNITS OF MEASUREMENT FOR TIME" << std::endl;
-     std::cin >> timeUnits;
+     timeUnits = validateString(timeUnits);
+     velocityUnits = Capitalize(velocityUnits);
+     timeUnits = Capitalize(timeUnits);
+
      std::cout << "THE AVERAGE ACCELERATION OF THE OBJECT IS " << velocity << " " << velocityUnits
           << " IN " << time << " " << timeUnits << " IS " << velocity / time << " " << velocityUnits << " PER "
           << timeUnits << std::endl;
 }
 int MotionMenu()
 {
-     int motionMenuSelection = 1;
+     int selection = 0;
      std::cout << "MOTION SUBMENU" << std::endl;
      std::cout << "\'1\' -" << std::endl;
      std::cout << "\'2\' -" << std::endl;
      std::cout << "\'3\' -" << std::endl;
      std::cout << "\'4\' -" << std::endl;
-     return motionMenuSelection;
+     do {
+          validateInt(selection);
+          if (selection < 1 || selection > 4)
+          {
+               std::cout << "Must be a value from 1 to 4!" << std::endl;
+          }
+     } while (selection < 1 || selection > 4);
+     return selection;
 }
-void CalculateMotion()
+void CalculateMotion(int option)
 {
+     switch (option) 
+     {
+     case(1):
+          std::cout << "OPTION 1" << std::endl;
+          break;
+     case(2):
+          std::cout << "OPTION 2" << std::endl;
+          break;
+     case(3):
+          std::cout << "OPTION 3" << std::endl;
+          break;
+     case(4):
+          std::cout << "OPTION 4" << std::endl;
+          break;
+     default:
+          std::cout << "COULD NOT FIND SELECTED OPTION" << std::endl;
+          break;
+     }
 
 }
 void CalculateNewtonsSecondLaw()
@@ -148,5 +160,3 @@ std::string Capitalize(std::string toCaps)
      }
      return toCaps;
 }
-
-#endif // !FUNCTIONS_H
